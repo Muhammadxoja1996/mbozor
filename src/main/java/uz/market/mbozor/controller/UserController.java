@@ -20,12 +20,10 @@ public class UserController {
         this.service = service;
     }
 
-    // page qo'shish kere
     @GetMapping("/get-all")
-    public ResponseDto getAll(){
-//    public List<UserDto> getAll(@RequestParam(defaultValue = "0") Integer page,
-//                                @RequestParam(defaultValue = "5") Integer size) {
-        return service.getAll();
+    public ResponseDto getAll(@RequestParam(defaultValue = "0")  Integer page,
+                                @RequestParam(defaultValue = "5") Integer size) {
+        return service.getAll(page, size);
     }
 
     @GetMapping("/get-one/{userName}")
@@ -37,6 +35,4 @@ public class UserController {
     public ResponseDto getOne(@RequestBody UserDto userDto){
         return service.userAdd(userDto);
     }
-
-
 }

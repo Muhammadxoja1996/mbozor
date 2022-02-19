@@ -18,6 +18,7 @@ public class ItemDto {
     private Integer firstPay;
     private Integer payOfMonth;
     private String payDate;
+    private String payPeriod;
     private Integer discount;
     private String comment;
 }

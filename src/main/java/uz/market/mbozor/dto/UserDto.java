@@ -21,6 +21,5 @@ public class UserDto {
     private Long tgId;
     private String tgNumber;
     private String comment;
-//    private List<ItemDto> items;
 
 }

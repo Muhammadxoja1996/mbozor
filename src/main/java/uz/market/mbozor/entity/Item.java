@@ -38,6 +38,9 @@ public class Item {
     @Column(name = "pay_of_month")
     private Integer payOfMonth;
 
+    @Column(name = "pay_period")
+    private String payPeriod;
+
     @Column(name = "pay_date")
     private String payDate;
 

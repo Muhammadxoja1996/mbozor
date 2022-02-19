@@ -1,8 +1,13 @@
 package uz.market.mbozor.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import uz.market.mbozor.dto.ContentPageableDto;
 import uz.market.mbozor.dto.ItemDto;
+import uz.market.mbozor.dto.PageableDto;
 import uz.market.mbozor.dto.ResponseDto;
 import uz.market.mbozor.entity.Item;
 import uz.market.mbozor.repository.ItemRepository;
@@ -24,33 +29,55 @@ public class ItemService {
         this.itemRepository = itemRepository;
     }
 
-
-    public ResponseDto getAll()  {
-        List<Item> items = itemRepository.findAll();
-        List<ItemDto> itemDtos = null;
+    public List<ItemDto> getByUserName(String userName) {
         try {
-            itemDtos = mapper.convertValue(items, List.class);
-        } catch (Exception e){
-            return new ResponseDto(1,"ERROR",e.getMessage(),null);
-        }
-        return new ResponseDto(0,"SUCCESS",null,itemDtos);
-
-    }
-
-    public ResponseDto getOne(Long id){
-        try {
-            return new ResponseDto(0,"SUCCESS",null,mapper.convertValue(itemRepository.findById(id),ItemDto.class));
-        } catch (Exception e){
-            return new ResponseDto(1,"ERROR",e.getMessage(),null);
+            return mapper.convertValue(itemRepository.findAllByUserName(userName), List.class);
+        } catch (Exception e) {
+            return null;
         }
     }
 
-    public ResponseDto itemAdd(ItemDto dto){
+    @Transactional
+    public ResponseDto getItemNames() {
+        List<String> stringList;
         try {
-            itemRepository.save(mapper.convertValue(dto,Item.class));
-        } catch (Exception e){
-            return new ResponseDto(1,"ERROR",e.getMessage(),null);
+            stringList = itemRepository.getAllItems();
+        } catch (Exception e) {
+            return new ResponseDto(1, "ERROR", e.getMessage(), null);
         }
-        return new ResponseDto(0,"SUCCESS",null,null);
+        return new ResponseDto(0, "SUCCESS", null, stringList);
+    }
+
+    public ResponseDto getAll(Integer page, Integer size) {
+        if (size > 20) {
+            size = 20;
+        }
+        Page<Item> items = itemRepository.findAll(PageRequest.of(page, size));
+        ContentPageableDto contentPageableDto = new ContentPageableDto();
+        try {
+            contentPageableDto.setPageable(new PageableDto(items.getTotalElements(), items.getTotalPages(), size, page));
+            contentPageableDto.setContent(mapper.convertValue(items.getContent(), List.class));
+        } catch (Exception e) {
+            return new ResponseDto(1, "ERROR", e.getMessage(), null);
+        }
+        return new ResponseDto(0, "SUCCESS", null, contentPageableDto);
+
+    }
+
+    public ResponseDto getOne(Long id) {
+        try {
+            return new ResponseDto(0, "SUCCESS", null, mapper.convertValue(itemRepository.findById(id), ItemDto.class));
+        } catch (Exception e) {
+            return new ResponseDto(1, "ERROR", e.getMessage(), null);
+        }
+    }
+
+    public ResponseDto itemAdd(ItemDto dto) {
+        try {
+            itemRepository.save(mapper.convertValue(dto, Item.class));
+        } catch (Exception e) {
+            return new ResponseDto(1, "ERROR", e.getMessage(), null);
+        }
+        return new ResponseDto(0, "SUCCESS", null, null);
     }
 }

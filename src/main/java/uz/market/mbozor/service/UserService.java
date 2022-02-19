@@ -1,9 +1,10 @@
 package uz.market.mbozor.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import uz.market.mbozor.dto.ResponseDto;
-import uz.market.mbozor.dto.UserDto;
+import uz.market.mbozor.dto.*;
 import uz.market.mbozor.entity.User;
 import uz.market.mbozor.repository.UserRepository;
 
@@ -18,42 +19,54 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ItemService itemService;
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, ItemService itemService) {
         this.userRepository = userRepository;
+        this.itemService = itemService;
     }
 
-    public ResponseDto getAll()  {
-        List<User> users = userRepository.findAll();
-        List<UserDto> userDtos = null;
-        try {
-            userDtos = mapper.convertValue(users, List.class);
-        } catch (Exception e){
-            return new ResponseDto(1,"ERROR",e.getMessage(),null);
+    public ResponseDto getAll(Integer page, Integer size) {
+        if (size > 20){
+            size = 20;
         }
-        return new ResponseDto(0,"SUCCESS",null,userDtos);
+        Page<User> users = userRepository.findAll(PageRequest.of(page, size));
+        ContentPageableDto userPageableDto = new ContentPageableDto();
+        try {
+            userPageableDto.setPageable(new PageableDto(users.getTotalElements(),
+                    users.getTotalPages(), size, page));
+            userPageableDto.setContent(mapper.convertValue(users.getContent(), List.class));
+        } catch (Exception e) {
+            return new ResponseDto(1, "ERROR", e.getMessage(), null);
+        }
+        return new ResponseDto(0, "SUCCESS", null, userPageableDto);
 
     }
 
-    public ResponseDto getOne(String userName){
+    public ResponseDto getOne(String userName) {
         try {
+            UserItemsDto userItemsDto = new UserItemsDto(userRepository.findByUserName(userName));
+            List<ItemDto> itemDto = itemService.getByUserName(userItemsDto.getUserName());
+            if (itemDto != null) {
+                userItemsDto.setItems(itemDto);
+            }
             return new ResponseDto(0,
                     "SUCCESS",
                     null,
-                    mapper.convertValue(userRepository.findByUserName(userName),UserDto.class));
-        } catch (Exception e){
-            return new ResponseDto(1,"ERROR",e.getMessage(),null);
+                    userItemsDto);
+        } catch (Exception e) {
+            return new ResponseDto(1, "ERROR", e.getMessage(), null);
         }
     }
 
-    public ResponseDto userAdd(UserDto dto){
+    public ResponseDto userAdd(UserDto dto) {
         try {
-            userRepository.save(mapper.convertValue(dto,User.class));
-        } catch (Exception e){
-            return new ResponseDto(1,"ERROR",e.getMessage(),null);
+            userRepository.save(mapper.convertValue(dto, User.class));
+        } catch (Exception e) {
+            return new ResponseDto(1, "ERROR", e.getMessage(), null);
         }
-        return new ResponseDto(0,"SUCCESS",null,null);
+        return new ResponseDto(0, "SUCCESS", null, null);
     }
 
 }

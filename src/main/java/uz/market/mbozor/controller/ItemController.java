@@ -20,22 +20,24 @@ public class ItemController {
         this.service = service;
     }
 
-
-    // page qo'shish kere
     @GetMapping("/get-all")
-    public ResponseDto getAll(){
-//    public List<UserDto> getAll(@RequestParam(defaultValue = "0") Integer page,
-//                                @RequestParam(defaultValue = "5") Integer size) {
-        return service.getAll();
+    public ResponseDto getAll(@RequestParam(defaultValue = "0") Integer page,
+                              @RequestParam(defaultValue = "5") Integer size) {
+        return service.getAll(page, size);
     }
 
     @GetMapping("/get-one/{id}")
-    public ResponseDto getOne(@PathVariable("id") Long id){
+    public ResponseDto getOne(@PathVariable("id") Long id) {
         return service.getOne(id);
     }
 
-    @GetMapping("/add")
-    public ResponseDto getOne(@RequestBody ItemDto itemDto){
+    @PostMapping("/add")
+    public ResponseDto getOne(@RequestBody ItemDto itemDto) {
         return service.itemAdd(itemDto);
+    }
+
+    @GetMapping("/items-name")
+    public ResponseDto getItemsName(){
+        return service.getItemNames();
     }
 }
