@@ -80,4 +80,13 @@ public class ItemService {
         }
         return new ResponseDto(0, "SUCCESS", null, null);
     }
+
+    public ResponseDto deleteItem(Long itemId) {
+        try{
+            itemRepository.deleteById(itemId);
+        } catch (Exception e) {
+            return new ResponseDto(1, "ERROR", e.getMessage(), null);
+        }
+        return new ResponseDto(0, "SUCCESS", null, null);
+    }
 }

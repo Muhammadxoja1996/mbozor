@@ -40,4 +40,9 @@ public class ItemController {
     public ResponseDto getItemsName(){
         return service.getItemNames();
     }
+
+    @DeleteMapping("/delete/item/{itemId}")
+    public ResponseDto deleteItem(@PathVariable("itemId") Long itemId ) {
+        return service.deleteItem(itemId);
+    }
 }

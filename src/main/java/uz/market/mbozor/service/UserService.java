@@ -9,6 +9,7 @@ import uz.market.mbozor.entity.User;
 import uz.market.mbozor.repository.UserRepository;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Author: Muhammadxo'ja
@@ -69,4 +70,43 @@ public class UserService {
         return new ResponseDto(0, "SUCCESS", null, null);
     }
 
+
+    public ResponseDto deleteStudent(Long userId) {
+        try{
+            userRepository.deleteById(userId);
+        } catch (Exception e) {
+            return new ResponseDto(1, "ERROR", e.getMessage(), null);
+    }
+        return new ResponseDto(0, "SUCCESS", null, null);
+    }
+
+
+    public void updateUser(Long userId, String userName, String phoneNumber, Boolean userStatus, Long tgId, String tgNumber, String comment) {
+        User user = userRepository.findById(userId).orElseThrow(()-> new IllegalStateException(
+                "user with id " + userId + "does not exist"));
+
+        if (userName != null && userName.length() > 0 && !Objects.equals(user.getUserName() , userName)) {
+            user.setUserName(userName);
+        }
+
+        if (phoneNumber != null && phoneNumber.length() > 0 && !Objects.equals(user.getPhoneNumber() , phoneNumber)) {
+            user.setPhoneNumber(phoneNumber);
+        }
+
+        if (userStatus != null && !Objects.equals(user.getUserStatus() , userStatus)) {
+            user.setUserStatus(userStatus);
+        }
+
+        if (tgId != null  && !Objects.equals(user.getTgId() , tgId)) {
+            user.setTgId(tgId);
+        }
+
+        if (tgNumber != null && tgNumber.length() > 0 && !Objects.equals(user.getTgNumber() , tgNumber)) {
+            user.setTgNumber(tgNumber);
+        }
+
+        if (!Objects.equals(user.getComment() , comment)) {
+            user.setComment(comment);
+        }
+    }
 }
