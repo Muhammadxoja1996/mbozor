@@ -1,10 +1,12 @@
 package uz.market.mbozor.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import uz.market.mbozor.entity.Item;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -18,4 +20,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     @Query("SELECT p.itemName FROM Item p")
     List<String> getAllItems();
+
+    @Modifying
+    @Query("UPDATE Item p SET p.payPeriod = :payPeriod WHERE p.id = :id")
+    void updateItem(Long id, Integer payPeriod);
 }

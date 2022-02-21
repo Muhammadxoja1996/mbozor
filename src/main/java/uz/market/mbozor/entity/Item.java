@@ -39,10 +39,13 @@ public class Item {
     private Integer payOfMonth;
 
     @Column(name = "pay_period")
-    private String payPeriod;
+    private Integer payPeriod;
 
     @Column(name = "pay_date")
     private String payDate;
+
+    @Column(name = "notification_time")
+    private Integer notificationTime;
 
     private Integer discount;
 

@@ -35,4 +35,14 @@ public class UserController {
     public ResponseDto getOne(@RequestBody UserDto userDto){
         return service.userAdd(userDto);
     }
+
+    @PutMapping("/update")
+    public ResponseDto update(@RequestBody UserDto userDto){
+        return service.update(userDto);
+    }
+
+    @DeleteMapping("/delete/{userName}")
+    public ResponseDto delete(@PathVariable("userName")String userName){
+        return service.delete(userName);
+    }
 }

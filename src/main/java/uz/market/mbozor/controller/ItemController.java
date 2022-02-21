@@ -3,6 +3,7 @@ package uz.market.mbozor.controller;
 import org.springframework.web.bind.annotation.*;
 import uz.market.mbozor.dto.ItemDto;
 import uz.market.mbozor.dto.ResponseDto;
+import uz.market.mbozor.entity.Item;
 import uz.market.mbozor.service.ItemService;
 
 /**
@@ -39,5 +40,20 @@ public class ItemController {
     @GetMapping("/items-name")
     public ResponseDto getItemsName(){
         return service.getItemNames();
+    }
+
+    @PutMapping("/update")
+    public ResponseDto update(@RequestBody Item item){
+        return service.update(item);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseDto delete(@PathVariable("id")Long id){
+        return service.delete(id);
+    }
+
+    @GetMapping("/pay-success/{id}")
+    public ResponseDto paySuccess(@PathVariable("id") Long id,@RequestParam Integer period){
+        return service.paySuccess(id,period);
     }
 }

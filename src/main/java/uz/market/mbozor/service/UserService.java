@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uz.market.mbozor.dto.*;
 import uz.market.mbozor.entity.User;
 import uz.market.mbozor.repository.UserRepository;
@@ -67,6 +68,26 @@ public class UserService {
             return new ResponseDto(1, "ERROR", e.getMessage(), null);
         }
         return new ResponseDto(0, "SUCCESS", null, null);
+    }
+
+    public ResponseDto update(UserDto dto){
+        try {
+            User user = userRepository.findByUserName(dto.getUserName());
+            user.update(dto);
+            userRepository.save(user);
+            return new ResponseDto(0, "SUCCESS", null, null);
+        }catch ( Exception e){
+            return new ResponseDto(1, "ERROR", e.getMessage(), null);
+        }
+    }
+    @Transactional
+    public ResponseDto delete(String userName){
+        try {
+            userRepository.deleteByUserName(userName);
+            return new ResponseDto(0, "SUCCESS", null, null);
+        }catch ( Exception e){
+            return new ResponseDto(1, "ERROR", e.getMessage(), null);
+        }
     }
 
 }

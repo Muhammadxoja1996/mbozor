@@ -80,4 +80,31 @@ public class ItemService {
         }
         return new ResponseDto(0, "SUCCESS", null, null);
     }
+
+    public ResponseDto update(Item item) {
+        try {
+            itemRepository.save(item);
+        } catch (Exception e) {
+            return new ResponseDto(1, "ERROR", e.getMessage(), null);
+        }
+        return new ResponseDto(0, "SUCCESS", null, null);
+    }
+
+    public ResponseDto delete(Long id){
+        try {
+            itemRepository.deleteById(id);
+        } catch (Exception e) {
+            return new ResponseDto(1, "ERROR", e.getMessage(), null);
+        }
+        return new ResponseDto(0, "SUCCESS", null, null);
+    }
+    @Transactional
+    public ResponseDto paySuccess(Long id, Integer period){
+        try {
+            itemRepository.updateItem(id,period);
+        } catch (Exception e) {
+            return new ResponseDto(1, "ERROR", e.getMessage(), null);
+        }
+        return new ResponseDto(0, "SUCCESS", null, null);
+    }
 }

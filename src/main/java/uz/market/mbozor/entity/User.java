@@ -3,6 +3,7 @@ package uz.market.mbozor.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import uz.market.mbozor.dto.UserDto;
 
 import javax.persistence.*;
 
@@ -39,4 +40,12 @@ public class User {
     private String tgNumber;
 
     private String comment;
+
+    public void update(UserDto userDto) {
+        this.phoneNumber = userDto.getPhoneNumber();
+        this.userStatus = userDto.getUserStatus();
+        this.tgId = userDto.getTgId();
+        this.tgNumber = userDto.getTgNumber();
+        this.comment = userDto.getComment();
+    }
 }
