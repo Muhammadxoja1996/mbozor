@@ -1,8 +1,9 @@
-package uz.market.mbozor.dto;
+package uz.market.mbozor.dto.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import uz.market.mbozor.entity.User;
 
 import java.util.List;
 
@@ -22,4 +23,12 @@ public class UserDto {
     private String tgNumber;
     private String comment;
 
+    public UserDto(User user) {
+        this.userName = user.getUserName();
+        this.phoneNumber = user.getPhoneNumber();
+        this.userStatus = user.getUserStatus();
+        this.tgId = user.getTgId();
+        this.tgNumber = user.getTgNumber();
+        this.comment = user.getComment();
+    }
 }

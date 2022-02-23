@@ -1,6 +1,7 @@
-package uz.market.mbozor.dto;
+package uz.market.mbozor.dto.users;
 
 import lombok.Data;
+import uz.market.mbozor.dto.items.ItemDto;
 import uz.market.mbozor.entity.User;
 
 import java.util.List;

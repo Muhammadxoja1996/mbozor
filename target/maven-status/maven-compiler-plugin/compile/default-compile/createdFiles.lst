@@ -1,0 +1,16 @@
+uz\market\mbozor\MbozorApplication.class
+uz\market\mbozor\service\UserService.class
+uz\market\mbozor\controller\UserController.class
+uz\market\mbozor\dto\ItemDto.class
+uz\market\mbozor\entity\User.class
+uz\market\mbozor\dto\PageableDto.class
+uz\market\mbozor\entity\Item.class
+uz\market\mbozor\service\Notification.class
+uz\market\mbozor\controller\ItemController.class
+uz\market\mbozor\repository\UserRepository.class
+uz\market\mbozor\service\ItemService.class
+uz\market\mbozor\dto\ResponseDto.class
+uz\market\mbozor\dto\UserItemsDto.class
+uz\market\mbozor\repository\ItemRepository.class
+uz\market\mbozor\dto\ContentPageableDto.class
+uz\market\mbozor\dto\UserDto.class

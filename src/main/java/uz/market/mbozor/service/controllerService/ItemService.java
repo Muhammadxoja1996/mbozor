@@ -1,4 +1,4 @@
-package uz.market.mbozor.service;
+package uz.market.mbozor.service.controllerService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.domain.Page;
@@ -6,12 +6,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.market.mbozor.dto.ContentPageableDto;
-import uz.market.mbozor.dto.ItemDto;
+import uz.market.mbozor.dto.items.ItemDto;
 import uz.market.mbozor.dto.PageableDto;
 import uz.market.mbozor.dto.ResponseDto;
+import uz.market.mbozor.dto.items.ItemSuccessDto;
 import uz.market.mbozor.entity.Item;
 import uz.market.mbozor.repository.ItemRepository;
+import uz.market.mbozor.utils.Utils;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -74,6 +77,7 @@ public class ItemService {
 
     public ResponseDto itemAdd(ItemDto dto) {
         try {
+            dto.setPayDate(Utils.simpleDateFormat.format(new Date(System.currentTimeMillis())));
             itemRepository.save(mapper.convertValue(dto, Item.class));
         } catch (Exception e) {
             return new ResponseDto(1, "ERROR", e.getMessage(), null);
@@ -90,7 +94,7 @@ public class ItemService {
         return new ResponseDto(0, "SUCCESS", null, null);
     }
 
-    public ResponseDto delete(Long id){
+    public ResponseDto delete(Long id) {
         try {
             itemRepository.deleteById(id);
         } catch (Exception e) {
@@ -98,10 +102,29 @@ public class ItemService {
         }
         return new ResponseDto(0, "SUCCESS", null, null);
     }
+
     @Transactional
-    public ResponseDto paySuccess(Long id, Integer period){
+    public ResponseDto paySuccess(Long id, Integer period) {
         try {
-            itemRepository.updateItem(id,period);
+            List<String> item = itemRepository.getPayDate(id);
+            int payPeriodResult = Integer.parseInt(item.get(0).split(",")[1]);
+            if (payPeriodResult >= period) {
+                payPeriodResult = payPeriodResult - period;
+            } else {
+                return new ResponseDto(1, "ERROR", "Period > period from DB", null);
+            }
+            String[] date = item.get(0).split(",")[0].split("\\.");
+            String year = date[2];
+            String month = (Integer.parseInt(date[1]) + period) + "";
+            if (Integer.parseInt(month)  > 12) {
+                month = (Integer.parseInt(month)-12) + "";
+                year = (Integer.parseInt(year)+1)+"";
+            }
+            if (month.length() == 1) {
+                month = "0" + month;
+            }
+            String payDate = date[0] + "." + month + "." + year;
+            itemRepository.updateItem(id, payDate, payPeriodResult);
         } catch (Exception e) {
             return new ResponseDto(1, "ERROR", e.getMessage(), null);
         }

@@ -1,4 +1,4 @@
-package uz.market.mbozor.service;
+package uz.market.mbozor.service.controllerService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.domain.Page;
@@ -6,10 +6,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.market.mbozor.dto.*;
+import uz.market.mbozor.dto.items.ItemDto;
+import uz.market.mbozor.dto.users.UserDto;
+import uz.market.mbozor.dto.users.UserItemsDto;
 import uz.market.mbozor.entity.User;
 import uz.market.mbozor.repository.UserRepository;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Author: Muhammadxo'ja
@@ -37,7 +42,7 @@ public class UserService {
         try {
             userPageableDto.setPageable(new PageableDto(users.getTotalElements(),
                     users.getTotalPages(), size, page));
-            userPageableDto.setContent(mapper.convertValue(users.getContent(), List.class));
+            userPageableDto.setContent(users.stream().filter(Objects::nonNull).map(UserDto::new).collect(Collectors.toList()));
         } catch (Exception e) {
             return new ResponseDto(1, "ERROR", e.getMessage(), null);
         }

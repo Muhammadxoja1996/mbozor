@@ -3,7 +3,7 @@ package uz.market.mbozor.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uz.market.mbozor.dto.UserDto;
+import uz.market.mbozor.dto.users.UserDto;
 
 import javax.persistence.*;
 

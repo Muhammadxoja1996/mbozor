@@ -2,8 +2,6 @@ package uz.market.mbozor.dto;
 
 import lombok.Data;
 
-import java.util.List;
-
 /**
  * Author: Muhammadxo'ja
  * Date: 19.02.2022
@@ -11,6 +9,6 @@ import java.util.List;
  */
 @Data
 public class ContentPageableDto {
-    private List<Object> content;
+    private Object content;
     private PageableDto pageable;
 }

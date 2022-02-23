@@ -45,7 +45,7 @@ public class Item {
     private String payDate;
 
     @Column(name = "notification_time")
-    private Integer notificationTime;
+    private Integer notificationTime = 0;
 
     private Integer discount;
 

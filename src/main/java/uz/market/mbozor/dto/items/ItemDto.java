@@ -1,4 +1,4 @@
-package uz.market.mbozor.dto;
+package uz.market.mbozor.dto.items;
 
 import lombok.Data;
 

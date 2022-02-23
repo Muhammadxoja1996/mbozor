@@ -1,10 +1,10 @@
 package uz.market.mbozor.controller;
 
 import org.springframework.web.bind.annotation.*;
-import uz.market.mbozor.dto.ItemDto;
+import uz.market.mbozor.dto.items.ItemDto;
 import uz.market.mbozor.dto.ResponseDto;
 import uz.market.mbozor.entity.Item;
-import uz.market.mbozor.service.ItemService;
+import uz.market.mbozor.service.controllerService.ItemService;
 
 /**
  * Author: Muhammadxo'ja
