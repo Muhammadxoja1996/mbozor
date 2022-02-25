@@ -1,11 +1,8 @@
 package uz.market.mbozor.dto.users;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import uz.market.mbozor.entity.User;
-
-import java.util.List;
 
 /**
  * Author: Muhammadxo'ja
@@ -30,5 +27,8 @@ public class UserDto {
         this.tgId = user.getTgId();
         this.tgNumber = user.getTgNumber();
         this.comment = user.getComment();
+    }
+
+    public UserDto() {
     }
 }

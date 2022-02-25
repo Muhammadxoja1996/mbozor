@@ -2,8 +2,6 @@ package uz.market.mbozor.dto.items;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-
 /**
  * Author: Muhammadxo'ja
  * Date: 16.02.2022

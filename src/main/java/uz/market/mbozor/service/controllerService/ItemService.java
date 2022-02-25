@@ -9,7 +9,6 @@ import uz.market.mbozor.dto.ContentPageableDto;
 import uz.market.mbozor.dto.items.ItemDto;
 import uz.market.mbozor.dto.PageableDto;
 import uz.market.mbozor.dto.ResponseDto;
-import uz.market.mbozor.dto.items.ItemSuccessDto;
 import uz.market.mbozor.entity.Item;
 import uz.market.mbozor.repository.ItemRepository;
 import uz.market.mbozor.utils.Utils;

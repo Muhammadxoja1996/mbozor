@@ -4,10 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import uz.market.mbozor.dto.items.ItemSuccessDto;
 import uz.market.mbozor.entity.Item;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 /**
