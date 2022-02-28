@@ -1,18 +1,16 @@
 package uz.market.mbozor.service;
 
-import org.apache.catalina.connector.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.util.ContentCachingResponseWrapper;
 import uz.market.mbozor.component.HttpSession;
+import uz.market.mbozor.repository.UserAuthRepository;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,14 +25,17 @@ public class RequestFilter extends OncePerRequestFilter {
 
     private final HttpSession httpSession;
     private static final List<String> whiteList = new ArrayList<>();
+    private final UserAuthRepository userAuthRepository;
 
     static {
         whiteList.add("/login");
         whiteList.add("/logout");
+        whiteList.add("/swagger-ui/index.html/");
     }
 
-    public RequestFilter(HttpSession httpSession) {
+    public RequestFilter(HttpSession httpSession, UserAuthRepository userAuthRepository) {
         this.httpSession = httpSession;
+        this.userAuthRepository = userAuthRepository;
     }
 
     @Override
@@ -43,11 +44,13 @@ public class RequestFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } else {
             if (httpSession.getToken() == null) {
-                ContentCachingResponseWrapper wrapper = new ContentCachingResponseWrapper(response);
-                wrapper.setStatus(401);
-                filterChain.doFilter(request, wrapper);
+                response.sendError(HttpStatus.UNAUTHORIZED.value(),HttpStatus.UNAUTHORIZED.getReasonPhrase());
             } else {
-                filterChain.doFilter(request, response);
+                if (userAuthRepository.existsByToken(httpSession.getToken())) {
+                    filterChain.doFilter(request, response);
+                } else {
+                    response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
+                }
             }
         }
     }

@@ -20,7 +20,7 @@ public class UserController {
         this.service = service;
     }
 
-    @GetMapping("/get-all")
+    @GetMapping(value = "/get-all")
     public ResponseDto getAll(@RequestParam(defaultValue = "0")  Integer page,
                                 @RequestParam(defaultValue = "5") Integer size) {
         return service.getAll(page, size);

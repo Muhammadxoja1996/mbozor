@@ -1,10 +1,8 @@
 package uz.market.mbozor.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uz.market.mbozor.dto.ResponseDto;
+import uz.market.mbozor.dto.auth.UserAuthDto;
 import uz.market.mbozor.service.controllerService.AuthService;
 
 /**
@@ -22,12 +20,17 @@ public class AuthController {
     }
 
     @PostMapping("login")
-    public ResponseDto login(){
-        return authService.login();
+    public ResponseDto login(@RequestBody UserAuthDto userAuthDto){
+        return authService.login(userAuthDto);
     }
 
     @GetMapping("logout")
     public ResponseDto logout(){
         return authService.logout();
+    }
+
+    @PostMapping("edit-password")
+    public ResponseDto editPassword(@RequestParam String password){
+        return authService.editPassword(password);
     }
 }
