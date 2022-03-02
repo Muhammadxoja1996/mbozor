@@ -1,18 +1,26 @@
 package uz.market.mbozor.service.controllerService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.FileUtils;
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import uz.market.mbozor.dto.ContentPageableDto;
 import uz.market.mbozor.dto.items.ItemDto;
 import uz.market.mbozor.dto.PageableDto;
 import uz.market.mbozor.dto.ResponseDto;
 import uz.market.mbozor.entity.Item;
+import uz.market.mbozor.entity.ItemFiles;
+import uz.market.mbozor.repository.ItemFileRepository;
 import uz.market.mbozor.repository.ItemRepository;
 import uz.market.mbozor.utils.Utils;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 
@@ -25,10 +33,12 @@ import java.util.List;
 public class ItemService {
 
     private final ItemRepository itemRepository;
+    private final ItemFileRepository itemFileRepository;
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public ItemService(ItemRepository itemRepository) {
+    public ItemService(ItemRepository itemRepository, ItemFileRepository itemFileRepository) {
         this.itemRepository = itemRepository;
+        this.itemFileRepository = itemFileRepository;
     }
 
     public List<ItemDto> getByUserName(String userName) {
@@ -115,9 +125,9 @@ public class ItemService {
             String[] date = item.get(0).split(",")[0].split("\\.");
             String year = date[2];
             String month = (Integer.parseInt(date[1]) + period) + "";
-            if (Integer.parseInt(month)  > 12) {
-                month = (Integer.parseInt(month)-12) + "";
-                year = (Integer.parseInt(year)+1)+"";
+            if (Integer.parseInt(month) > 12) {
+                month = (Integer.parseInt(month) - 12) + "";
+                year = (Integer.parseInt(year) + 1) + "";
             }
             if (month.length() == 1) {
                 month = "0" + month;
@@ -128,5 +138,39 @@ public class ItemService {
             return new ResponseDto(1, "ERROR", e.getMessage(), null);
         }
         return new ResponseDto(0, "SUCCESS", null, null);
+    }
+
+    public ResponseDto fileUpload(MultipartFile multipartFile) {
+        try {
+            InputStream inputStream = multipartFile.getInputStream();
+            String path = "";
+            if (multipartFile.getContentType().split("/")[0].equals("image")) {
+                path = "files/image/" + multipartFile.getOriginalFilename();
+            } else if (multipartFile.getContentType().split("/")[0].equals("video")) {
+                path = "files/video/" + multipartFile.getOriginalFilename();
+            }
+            if (!path.equals("")) {
+                OutputStream outputStream = new FileOutputStream(path);
+                outputStream.write(inputStream.readAllBytes());
+                outputStream.close();
+                itemFileRepository.save(new ItemFiles(null, multipartFile.getOriginalFilename(),
+                        multipartFile.getContentType().split("/")[0],
+                        multipartFile.getContentType().split("/")[1],
+                        multipartFile.getSize()));
+            }
+            return new ResponseDto(0, "SUCCESS", null, null);
+        } catch (IOException e) {
+            return new ResponseDto(1, "ERROR", e.getMessage(), null);
+        }
+    }
+
+    public ResponseDto fileDownload(String filePath) {
+        try {
+            File file = new File(filePath);
+            byte[] encoded = Base64.encodeBase64(FileUtils.readFileToByteArray(file));
+            return new ResponseDto(0, "SUCCESS", null, new String(encoded, StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

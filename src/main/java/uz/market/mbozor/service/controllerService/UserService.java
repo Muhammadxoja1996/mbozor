@@ -40,8 +40,7 @@ public class UserService {
         Page<User> users = userRepository.findAll(PageRequest.of(page, size));
         ContentPageableDto userPageableDto = new ContentPageableDto();
         try {
-            userPageableDto.setPageable(new PageableDto(users.getTotalElements(),
-                    users.getTotalPages(), size, page));
+            userPageableDto.setPageable(new PageableDto(users.getTotalElements(),users.getTotalPages(), size, page));
             userPageableDto.setContent(users.stream().filter(Objects::nonNull).map(UserDto::new).collect(Collectors.toList()));
         } catch (Exception e) {
             return new ResponseDto(1, "ERROR", e.getMessage(), null);

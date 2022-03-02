@@ -20,17 +20,17 @@ public class AuthController {
     }
 
     @PostMapping("login")
-    public ResponseDto login(@RequestBody UserAuthDto userAuthDto){
+    public ResponseDto login(@RequestBody UserAuthDto userAuthDto) {
         return authService.login(userAuthDto);
     }
 
     @GetMapping("logout")
-    public ResponseDto logout(){
+    public ResponseDto logout() {
         return authService.logout();
     }
 
     @PostMapping("edit-password")
-    public ResponseDto editPassword(@RequestParam String password){
+    public ResponseDto editPassword(@RequestParam String password) {
         return authService.editPassword(password);
     }
 }
