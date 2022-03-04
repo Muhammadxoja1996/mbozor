@@ -149,7 +149,11 @@ public class ItemService {
             } else if (multipartFile.getContentType().split("/")[0].equals("video")) {
                 path = "files/video/" + multipartFile.getOriginalFilename();
             }
-            if (!path.equals("")) {
+            else{
+                path = "files/others/"+ multipartFile.getOriginalFilename();
+            }
+            System.out.println(multipartFile.getContentType());
+
                 OutputStream outputStream = new FileOutputStream(path);
                 outputStream.write(inputStream.readAllBytes());
                 outputStream.close();
@@ -157,7 +161,7 @@ public class ItemService {
                         multipartFile.getContentType().split("/")[0],
                         multipartFile.getContentType().split("/")[1],
                         multipartFile.getSize()));
-            }
+
             return new ResponseDto(0, "SUCCESS", null, null);
         } catch (IOException e) {
             return new ResponseDto(1, "ERROR", e.getMessage(), null);
