@@ -1,6 +1,8 @@
 package uz.market.mbozor.controller;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 import uz.market.mbozor.dto.ResponseDto;
 import uz.market.mbozor.dto.auth.UserAuthDto;
 import uz.market.mbozor.service.controllerService.AuthService;
@@ -10,8 +12,8 @@ import uz.market.mbozor.service.controllerService.AuthService;
  * Date: 25.02.2022
  * Time: 21:18
  */
-@RestController
-@RequestMapping("/")
+@Controller
+@RequestMapping("/api/v1/")
 public class AuthController {
     private final AuthService authService;
 
@@ -20,8 +22,9 @@ public class AuthController {
     }
 
     @PostMapping("login")
-    public ResponseDto login(@RequestBody UserAuthDto userAuthDto) {
-        return authService.login(userAuthDto);
+    public RedirectView login(@ModelAttribute UserAuthDto userAuthDto) {
+        authService.login(userAuthDto);
+        return new RedirectView("/manager-panel");
     }
 
     @GetMapping("logout")
