@@ -1,15 +1,11 @@
 package uz.market.mbozor.controller;
 
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.market.mbozor.dto.items.ItemDto;
 import uz.market.mbozor.dto.ResponseDto;
 import uz.market.mbozor.entity.Item;
 import uz.market.mbozor.service.controllerService.ItemService;
-
-import java.io.File;
 
 /**
  * Author: Muhammadxo'ja
@@ -70,5 +66,15 @@ public class ItemController {
     @GetMapping("/file-download")
     public ResponseDto fileDownload(@RequestParam String filePath) {
         return service.fileDownload(filePath);
+    }
+
+    @PostMapping("/create-item-excel")
+    public ResponseDto createItemExcel(@RequestBody MultipartFile multipartFile){
+        return service.createItemExcel(multipartFile);
+    }
+
+    @GetMapping("/excel-example")
+    public ResponseDto excelExample(){
+        return service.excelExample();
     }
 }

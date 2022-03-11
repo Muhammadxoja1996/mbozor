@@ -30,7 +30,6 @@
 //    static {
 //        whiteList.add("/login");
 //        whiteList.add("/logout");
-//        whiteList.add("/swagger-ui/index.html");
 //    }
 //
 //    public RequestFilter(HttpSession httpSession, UserAuthRepository userAuthRepository) {
@@ -44,7 +43,7 @@
 //            filterChain.doFilter(request, response);
 //        } else {
 //            if (httpSession.getToken() == null) {
-//                response.sendError(HttpStatus.UNAUTHORIZED.value(),HttpStatus.UNAUTHORIZED.getReasonPhrase());
+//                response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
 //            } else {
 //                if (userAuthRepository.existsByToken(httpSession.getToken())) {
 //                    filterChain.doFilter(request, response);

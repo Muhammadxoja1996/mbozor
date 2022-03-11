@@ -2,8 +2,15 @@ package uz.market.mbozor.service.controllerService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.tomcat.util.codec.binary.Base64;
-import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -21,6 +28,7 @@ import uz.market.mbozor.utils.Utils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -148,19 +156,18 @@ public class ItemService {
                 path = "files/image/" + multipartFile.getOriginalFilename();
             } else if (multipartFile.getContentType().split("/")[0].equals("video")) {
                 path = "files/video/" + multipartFile.getOriginalFilename();
-            }
-            else{
-                path = "files/others/"+ multipartFile.getOriginalFilename();
+            } else {
+                path = "files/others/" + multipartFile.getOriginalFilename();
             }
             System.out.println(multipartFile.getContentType());
 
-                OutputStream outputStream = new FileOutputStream(path);
-                outputStream.write(inputStream.readAllBytes());
-                outputStream.close();
-                itemFileRepository.save(new ItemFiles(null, multipartFile.getOriginalFilename(),
-                        multipartFile.getContentType().split("/")[0],
-                        multipartFile.getContentType().split("/")[1],
-                        multipartFile.getSize()));
+            OutputStream outputStream = new FileOutputStream(path);
+            outputStream.write(inputStream.readAllBytes());
+            outputStream.close();
+            itemFileRepository.save(new ItemFiles(null, multipartFile.getOriginalFilename(),
+                    multipartFile.getContentType().split("/")[0],
+                    multipartFile.getContentType().split("/")[1],
+                    multipartFile.getSize()));
 
             return new ResponseDto(0, "SUCCESS", null, null);
         } catch (IOException e) {
@@ -174,7 +181,50 @@ public class ItemService {
             byte[] encoded = Base64.encodeBase64(FileUtils.readFileToByteArray(file));
             return new ResponseDto(0, "SUCCESS", null, new String(encoded, StandardCharsets.UTF_8));
         } catch (Exception e) {
-            return null;
+            return new ResponseDto(1, "ERROR", e.getMessage(), null);
+        }
+    }
+
+    public ResponseDto createItemExcel(MultipartFile multipartFile) {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+            InputStream inputStream = multipartFile.getInputStream();
+            XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+            XSSFSheet sheet = workbook.getSheetAt(0);
+            int rows = sheet.getPhysicalNumberOfRows();
+            for (int i = 1; i < rows + 1; i++) {
+                Item item = new Item();
+                XSSFRow row = sheet.getRow(i);
+                if (row.getCell(0) != null) {
+                    item.setComment(row.getCell(0).toString());
+                }
+                if (row.getCell(1) != null) {
+                    item.setDiscount(Integer.parseInt(row.getCell(1).toString()));
+                }
+                item.setFirstPay((int) Double.parseDouble(row.getCell(2).toString()));
+                item.setItemName(row.getCell(3).toString());
+                item.setItemPrice((int) Double.parseDouble(row.getCell(4).toString()));
+                item.setPayDate(simpleDateFormat.format(row.getCell(5).getDateCellValue()));
+                item.setPayOfMonth((int) Double.parseDouble(row.getCell(6).toString()));
+                item.setUserName(row.getCell(7).toString());
+                item.setPayPeriod((int) Double.parseDouble(row.getCell(8).toString()));
+                item.setNotificationTime((int) Double.parseDouble(row.getCell(9).toString()));
+                itemRepository.save(item);
+            }
+            return new ResponseDto(0, "SUCCESS", null, null);
+        } catch (Exception e) {
+            return new ResponseDto(1, "ERROR", e.getMessage(), null);
+        }
+    }
+
+    public ResponseDto excelExample() {
+        try {
+            ClassPathResource classPathResource = new ClassPathResource("static/item.xlsx");
+            byte[] encoded = Base64.encodeBase64(FileUtils.readFileToByteArray(classPathResource.getFile()));
+            String result = "data:file;base64," + new String(encoded, StandardCharsets.UTF_8);
+            return new ResponseDto(0, "SUCCESS", null, result);
+        } catch (Exception e) {
+            return new ResponseDto(1, "ERROR", e.getMessage(), null);
         }
     }
 }

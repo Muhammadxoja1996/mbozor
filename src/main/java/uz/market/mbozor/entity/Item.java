@@ -23,7 +23,7 @@ public class Item {
     @SequenceGenerator(name = "item_sec", sequenceName = "item_sec", allocationSize = 1)
     private Long id;
 
-    @Column(name = "user_name", nullable = true)
+    @Column(name = "user_name", unique = true)
     private String userName;
 
     @Column(name = "item_name")
