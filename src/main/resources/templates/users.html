@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <link th:href="@{/style/bootstrap.css}" rel="stylesheet" />
+</head>
+<body style="height: 100vh !important;">
+
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        <div class="col-2 h-100 p-0">
+            <div class="h-100" th:insert="~{fragments/menu}"></div>
+        </div>
+        <div class="col-10 h-100">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h3>Users list</h3>
+                </div>
+                <div class="card-body">
+                    <div class="card" th:each="userOne: ${userDtos}">
+                       <div class="card-header" th:text="${userOne.userName}"/>
+                       <div class="card-body" th:text="${userOne.phoneNumber}"/>
+                       <div class="card-body" th:text="${userOne.comment}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

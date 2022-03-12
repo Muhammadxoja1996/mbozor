@@ -1,6 +1,8 @@
 package uz.market.mbozor.dto.auth;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Author: Muhammadxo'ja
@@ -8,6 +10,8 @@ import lombok.Data;
  * Time: 21:23
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserAuthDto {
     private String login;
     private String password;
