@@ -12,5 +12,6 @@ import uz.market.mbozor.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUserName(String userName);
+
     void deleteByUserName(String userName);
 }

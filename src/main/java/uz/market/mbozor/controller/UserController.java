@@ -1,9 +1,12 @@
 package uz.market.mbozor.controller;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 import uz.market.mbozor.dto.ResponseDto;
 import uz.market.mbozor.dto.users.UserDto;
 import uz.market.mbozor.service.controllerService.UserService;
+
+import java.util.Objects;
 
 /**
  * Author: Muhammadxo'ja
@@ -21,28 +24,33 @@ public class UserController {
     }
 
     @GetMapping(value = "/get-all")
-    public ResponseDto getAll(@RequestParam(defaultValue = "0")  Integer page,
-                                @RequestParam(defaultValue = "5") Integer size) {
+    public ResponseDto getAll(@RequestParam(defaultValue = "0") Integer page,
+                              @RequestParam(defaultValue = "5") Integer size) {
         return service.getAll(page, size);
     }
 
     @GetMapping("/get-one/{userName}")
-    public ResponseDto getOne(@PathVariable("userName") String userName){
+    public ResponseDto getOne(@PathVariable("userName") String userName) {
         return service.getOne(userName);
     }
 
     @PostMapping("/add")
-    public ResponseDto getOne(@RequestBody UserDto userDto){
-        return service.userAdd(userDto);
+    public RedirectView getOne(@ModelAttribute UserDto userDto) {
+        if (!Objects.equals(userDto.getUserName().trim(), "") && !Objects.equals(userDto.getPhoneNumber().trim(), "")) {
+            service.userAdd(userDto);
+        }
+        return new RedirectView("/users");
     }
 
-    @PutMapping("/update")
-    public ResponseDto update(@RequestBody UserDto userDto){
-        return service.update(userDto);
+    @PostMapping("/update")
+    public RedirectView update(@ModelAttribute UserDto userDto) {
+        service.update(userDto);
+        return new RedirectView("/users");
     }
 
-    @DeleteMapping("/delete/{userName}")
-    public ResponseDto delete(@PathVariable("userName")String userName){
-        return service.delete(userName);
+    @GetMapping("/delete/{userName}")
+    public RedirectView delete(@PathVariable("userName") String userName) {
+        service.delete(userName);
+        return new RedirectView("/users");
     }
 }

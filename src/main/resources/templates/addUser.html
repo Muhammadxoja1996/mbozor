@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add User</title>
+    <link th:href="@{/style/bootstrap.css}" rel="stylesheet" />
+</head>
+<body style="height: 100vh !important;">
+
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        <div class="col-2 h-100 p-0">
+            <div class="h-100" th:insert="~{fragments/menu}"></div>
+        </div>
+        <div class="col-10 h-100">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h3>Add User</h3>
+                </div>
+                <div class="card-body">
+                    <form action="#" th:action="@{/api/v1/users/add}" th:object="${userDto}" method="post">
+                        <p>User Name: <input class="form-control" type="text" th:field="*{userName}" /></p>
+                        <p>Phone Number: <input class="form-control" type="text" th:field="*{phoneNumber}" /></p>
+                        <p>Telegram Id: <input class="form-control" type="number" th:field="*{tgId}" /></p>
+                        <p>Telegram Number: <input class="form-control" type="text" th:field="*{tgNumber}" /></p>
+                        <p>Comment: <input class="form-control" type="text" th:field="*{comment}" /></p>
+                        <p><input type="submit" class="btn btn-info" value="Add" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

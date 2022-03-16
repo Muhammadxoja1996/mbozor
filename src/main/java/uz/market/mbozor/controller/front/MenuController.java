@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import uz.market.mbozor.dto.ContentPageableDto;
 import uz.market.mbozor.dto.ResponseDto;
 import uz.market.mbozor.dto.users.UserDto;
+import uz.market.mbozor.dto.users.UserItemsDto;
 import uz.market.mbozor.service.controllerService.UserService;
 
 import java.util.ArrayList;
@@ -39,5 +41,26 @@ public class MenuController {
         List<UserDto> userDtos = objectMapper.convertValue(contentPageableDto.getContent(),List.class);
         model.addAttribute("userDtos",userDtos);
         return "users";
+    }
+
+    @GetMapping("/user/{userName}")
+    public String user(@PathVariable("userName") String userName, Model model){
+        ResponseDto responseDto = service.getOne(userName);
+        model.addAttribute("userItemsDto",responseDto.getData());
+        return "user";
+    }
+
+    @GetMapping("/add-user")
+    public String addUser(Model model){
+        model.addAttribute("userDto",new UserDto());
+        return "addUser";
+    }
+
+    @GetMapping("/edit-user/{userName}")
+    public String editUser(@PathVariable("userName") String userName,Model model){
+        ResponseDto responseDto = service.getOne(userName);
+        model.addAttribute("userItemsDto",responseDto.getData());
+        model.addAttribute("userDto",new UserDto());
+        return "editUser";
     }
 }

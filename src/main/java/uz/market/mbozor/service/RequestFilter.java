@@ -43,12 +43,14 @@ public class RequestFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } else {
             if (httpSession.getToken() == null) {
-                response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
+                response.sendRedirect("/login");
+//                response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
             } else {
                 if (userAuthRepository.existsByToken(httpSession.getToken())) {
                     filterChain.doFilter(request, response);
                 } else {
-                    response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
+                    response.sendRedirect("/login");
+//                    response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
                 }
             }
         }

@@ -17,12 +17,24 @@
                 <div class="card-header text-center">
                     <h3>Users list</h3>
                 </div>
+                <a th:href="@{'/add-user'}"><button class="btn btn-primary">Add user</button></a>
                 <div class="card-body">
-                    <div class="card" th:each="userOne: ${userDtos}">
-                       <div class="card-header" th:text="${userOne.userName}"/>
-                       <div class="card-body" th:text="${userOne.phoneNumber}"/>
-                       <div class="card-body" th:text="${userOne.comment}"/>
-                    </div>
+                   <div class="d-flex justify-content-between" th:each="userOne: ${userDtos}">
+                       <a class="w-100" th:href="@{'/user/' + ${userOne.userName}}">
+                           <div class="card">
+                               <div class="card-header" th:text="${userOne.userName}"/>
+                               <div class="card-body" th:text="${userOne.phoneNumber}"/>
+                               <div class="card-body" th:text="${userOne.comment}"/>
+                           </div>
+                       </a>
+                       <div>
+                           <a class="w-100" th:href="@{'/edit-user/' + ${userOne.userName}}"><button class="btn btn-warning w-100">Edit</button></a>
+                           <br>
+                           <br>
+                           <br>
+                           <a class="w-100" th:href="@{'/api/v1/users/delete/'+${userOne.userName}}"><button class="btn btn-danger w-100">Delete</button></a>
+                       </div>
+                   </div>
                 </div>
             </div>
         </div>

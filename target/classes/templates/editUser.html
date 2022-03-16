@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit User</title>
+    <link th:href="@{/style/bootstrap.css}" rel="stylesheet" />
+</head>
+<body style="height: 100vh !important;">
+
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        <div class="col-2 h-100 p-0">
+            <div class="h-100" th:insert="~{fragments/menu}"></div>
+        </div>
+        <div class="col-10 h-100">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h3>Users list</h3>
+                </div>
+                <div class="card-body">
+                    <form action="#" th:action="@{/api/v1/users/update}" th:object="${userDto}" method="post">
+                        <p>User Name: <input th:value="${userItemsDto.userName}" class="form-control" type="text" name="userName" /></p>
+                        <p>Phone Number: <input th:value="${userItemsDto.phoneNumber}" class="form-control" type="text" name="phoneNumber" /></p>
+                        <p>User Status: <input th:value="${userItemsDto.userStatus}" class="form-check-input" type="checkbox" name="userStatus" /></p>
+                        <p>Telegram Id: <input th:value="${userItemsDto.tgId}" class="form-control" type="number" name="tgId" /></p>
+                        <p>Telegram Number: <input th:value="${userItemsDto.tgNumber}" class="form-control" type="text" name="tgNumber" /></p>
+                        <p>Comment: <input th:value="${userItemsDto.comment}" class="form-control" type="text" name="comment" /></p>
+                        <p><input type="submit" class="btn btn-info" value="Edit" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
