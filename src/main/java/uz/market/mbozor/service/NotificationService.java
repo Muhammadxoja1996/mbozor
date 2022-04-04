@@ -53,6 +53,7 @@ public class NotificationService {
             } catch (Exception e) {
                 if (e.getMessage().equals("Error sending message: [400] Bad Request: chat not found")){
                     System.out.println(item.getUserName()+
+                            "adsfasdf"+
                             ": to'lo'v kuni aytilmadi\nTo'lo'v kuni: "+
                             item.getPayDate()+
                             "\nTovar: "+
