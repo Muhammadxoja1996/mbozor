@@ -29,7 +29,7 @@ public class NotificationService {
         this.telegramBotService = telegramBotService;
     }
 
-    @Scheduled(fixedDelay = 3300000L)
+    @Scheduled(fixedDelay = 2900000L)
     public void notificationLoop() {
         List<Item> items = itemRepository.findAll();
         String[] dateNow = Utils.simpleDateFormat.format(new Date()).split("\\.");
@@ -56,7 +56,8 @@ public class NotificationService {
                             ": to'lo'v kuni aytilmadi\nTo'lo'v kuni: "+
                             item.getPayDate()+
                             "\nTovar: "+
-                            item.getItemName());
+                            item.getItemName()+
+                            "time: "+Utils.simpleDateFormat.format(new Date()));
                 }
             }
 
