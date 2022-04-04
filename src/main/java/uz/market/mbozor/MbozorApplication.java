@@ -8,10 +8,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 public class MbozorApplication {
     
-    public void test() {
-    System.out.println();
-    }
-    
     public static void main(String[] args) {
         SpringApplication.run(MbozorApplication.class, args);
     }
