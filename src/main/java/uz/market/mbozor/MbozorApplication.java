@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class MbozorApplication {
     
     public void test() {
-    System.out.prrint();
+    System.out.println();
     }
     
     public static void main(String[] args) {
